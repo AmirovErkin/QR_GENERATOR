@@ -1,0 +1,23 @@
+{% extends "qrcodeapp/base.html" %}
+{% load crispy_forms_tags %}
+
+ {% block heading %}
+    <title>QR code generator</title>
+ {% endblock heading%}
+{% block content %}
+
+        <h1>
+            QR code generator
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit">Generate</button>
+        </form>
+
+        <div class="qr-img">
+            {% if img_name %}
+                <img src="/media/{{ img_name }}" alt="qr code">
+            {% endif %}
+        </div>
+{% endblock content%}
