@@ -1,4 +1,4 @@
-
+from .models import QRCode
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.conf import settings
@@ -14,7 +14,6 @@ def home(request):
                         "<br>social/instagram<br>"
                         "Shu kommandalar orqali dasturimizni ishlatishingiz mumkin")
 def wifi_generator(request):
-
     if request.method == 'POST':
         form = forms.WifiForm(request.POST)
         if form.is_valid():
@@ -24,7 +23,13 @@ def wifi_generator(request):
             wifi_info = f"WIFI:S:{wifi_name};T:{encryiption};P:{password};;"
             img = qrcode.make(wifi_info)
             img_name = 'qr' + str(time.time()) + '.png'
-            img.save(str(settings.MEDIA_ROOT) + '/' + str(img_name))
+            img_path = str(settings.MEDIA_ROOT) + '/' + str(img_name)
+            img.save(img_path)
+            form.save()
+            # Save the QR code to the model
+            qrcode_model = QRCode(image=img_path)
+            qrcode_model.save()
+
             return render(request, 'qrcodeapp/index.html', {'img_name': img_name, 'form': form})
     else:
         form = forms.WifiForm()
@@ -38,7 +43,12 @@ def generate_link_code(request):
             link = form.cleaned_data['link']
             link_inf = qrcode.make(link)
             img_name = 'qr' + str(time.time()) + '.png'
-            link_inf.save(str(settings.MEDIA_ROOT) + '/' + str(img_name))
+            img_path = str(settings.MEDIA_ROOT) + '/' + str(img_name)
+            link_inf.save(img_path)
+
+            # Save the QR code to the model
+            qrcode_model = QRCode(image=img_path)
+            qrcode_model.save()
             form.save()
             return render(request, 'qrcodeapp/link.html', {'form': form, 'img_name':img_name})
     else:
@@ -53,8 +63,12 @@ def social_insta(request):
             url = f"https://instagram.com/{username}"
             social_inf = qrcode.make(url)
             img_name = 'qr' + str(time.time()) + '.png'
-            social_inf.save(str(settings.MEDIA_ROOT) + '/' + str(img_name))
+            img_path = str(settings.MEDIA_ROOT) + '/' + str(img_name)
+            social_inf.save(img_path)
             form.save()
+            # Save the QR code to the model
+            qrcode_model = QRCode(image=img_path)
+            qrcode_model.save()
             return render(request, 'qrcodeapp/social.html', {'form': form, 'img_name': img_name})
     else:
         form = forms.SocialForm()
@@ -68,8 +82,13 @@ def social_twitter(request):
             url = f"https://twitter.com/{username}"
             social_inf = qrcode.make(url)
             img_name = 'qr' + str(time.time()) + '.png'
-            social_inf.save(str(settings.MEDIA_ROOT) + '/' + str(img_name))
+            img_path = str(settings.MEDIA_ROOT) + '/' + str(img_name)
+            social_inf.save(img_path)
             form.save()
+            # Save the QR code to the model
+            qrcode_model = QRCode(image=img_path)
+            qrcode_model.save()
+
             return render(request, 'qrcodeapp/social.html', {'form': form, 'img_name': img_name})
     else:
         form = forms.SocialForm()
@@ -83,8 +102,12 @@ def social_telegram(request):
             url = f"https://t.me/{username}"
             social_inf = qrcode.make(url)
             img_name = 'qr' + str(time.time()) + '.png'
-            social_inf.save(str(settings.MEDIA_ROOT) + '/' + str(img_name))
+            img_path = str(settings.MEDIA_ROOT) + '/' + str(img_name)
+            social_inf.save(img_path)
             form.save()
+            # Save the QR code to the model
+            qrcode_model = QRCode(image=img_path)
+            qrcode_model.save();
             return render(request, 'qrcodeapp/social.html', {'form': form, 'img_name': img_name})
     else:
         form = forms.SocialForm()

@@ -15,3 +15,7 @@ class LinkCode(models.Model):
 class SocialCode(models.Model):
     username = models.CharField(max_length=40)
 
+
+class QRCode(models.Model):
+    image = models.ImageField(upload_to='qrcodes/')
+    created_at = models.DateTimeField(auto_now_add=True)
